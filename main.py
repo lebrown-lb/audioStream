@@ -64,8 +64,9 @@ class MainWindow(QMainWindow):
         self.timer = QTimer()
         self.timer.setInterval(50)
         self.timer.timeout.connect(self.recurring_timer)
-        self.stream = sd.Stream(samplerate=44100, channels=1, device=5, blocksize=CHUNK)
-        self.stream.start()
+        #self.stream = sd.Stream(samplerate=44100, channels=1, device=5, blocksize=CHUNK)
+        self.stream = None
+        #self.stream.start()
         self.ydata = np.array(0)
         self.xdata = np.array(0)
         self.plot_graph.setYRange(-0.8, 0.8)
@@ -83,7 +84,9 @@ class MainWindow(QMainWindow):
 
 
     def device_change(self):
-        self.stream.stop()
+
+        if self.stream:
+            self.stream.stop()
         self.device = self.dl[self.cb0.currentIndex()]['index']
         self.stream = sd.Stream(samplerate=44100, channels=1, device=self.device, blocksize=CHUNK)
         self.stream.start()
